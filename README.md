@@ -38,6 +38,7 @@ See the [dhcp-options(5)](http://linux.die.net/man/5/dhcp-options) man page for 
 
 | Variable                          | Comments                                                                |
 | :---                              | :---                                                                    |
+| `dhcp_global_authoritative`       | Global authoritative (yes, no)
 | `dhcp_global_booting`             | Global booting (allow, deny, ignore)                                    |
 | `dhcp_global_bootp`               | Global bootp (allow, deny, ignore)                                      |
 | `dhcp_global_broadcast_address`   | Global broadcast address                                                |
@@ -101,6 +102,11 @@ dhcp_subnets:
       - name: cl2
         mac: '00:de:ad:be:ef:00'
         ip: 192.168.222.151
+    range:
+      - begin: 192.168.222.152
+        end: 192.168.222.160
+      - begin: 192/168.222.162
+        end: 192.168.222.163
 ```
 
 An alphabetical list of supported options in a subnet declaration:
@@ -118,10 +124,10 @@ An alphabetical list of supported options in a subnet declaration:
 | `max_lease_time`      | no       | Maximum lease time for this subnet (in seconds)                       |
 | `netmask`             | yes      | **Required.** Network mask of the subnet (in dotted decimal notation) |
 | `next_server`         | no       | IP address of the boot server                                         |
-| `range_begin`         | no       | Lowest address in the range of dynamic IP addresses to be assigned    |
-| `range_end`           | no       | Highest address in the range of dynamic IP addresses to be assigned   |
+| `ranges`              | no       | Array of the address range of dynamic IP addresses to be assigned     |
 | `routers`             | no       | IP address of the gateway for this subnet                             |
 | `subnet_mask`         | no       | Overrides the `netmask` of the subnet declaration                     |
+| `tftp_server_name`    | no       | Name of the TFtP server                                               |
 
 You can specify hosts that should get a fixed IP address based on their MAC by setting the `hosts` option. This is a list of dicts with the following three keys, all of which are mandatory:
 
