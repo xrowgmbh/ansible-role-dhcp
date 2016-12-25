@@ -14,9 +14,6 @@
   with_items: "{{ dhcp_packages }}"
   tags: dhcp
 
-- include: apparmor-fix.yml
-  when: ansible_os_family == 'Debian'
-
 - name: Install config file
   template:
     src: etc_dhcp_dhcpd.conf.j2
@@ -31,3 +28,5 @@
     state: started
     enabled: true
   tags: dhcp
+
+- firewalld: service=dhcp permanent=true state=enabled

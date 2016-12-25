@@ -83,22 +83,8 @@ subnet {{ subnet.ip }} netmask {{ subnet.netmask }} {
 {% if subnet.max_lease_time is defined %}
   max-lease-time {{ subnet.max_lease_time }};
 {% endif %}
-{% if subnet.domain_search is defined %}
-  option domain-search "{{ subnet.domain_search }}";
-{% endif %}
-{% if subnet.domain_name_servers is defined %}
-{% if subnet.domain_name_servers is string %}
-  option domain-name-servers {{ subnet.domain_name_servers }};
-{% else %}
-  option domain-name-servers {{ subnet.domain_name_servers|join(', ') }};
-{% endif %}
-{% endif %}
-{% if subnet.routers is defined %}
-  option routers {{ subnet.routers }};
-{% endif %}
-{% if subnet.subnet_mask is defined %}
-  option subnet-mask {{ subnet.subnet_mask }};
-{% endif %}
+
+
 {% if subnet.tftp_server_name is defined %}
   option tftp-server-name "{{ subnet.tftp_server_name }}";
 {% endif %}
@@ -107,18 +93,17 @@ subnet {{ subnet.ip }} netmask {{ subnet.netmask }} {
   range {{ range.begin }} {{ range.end }};
 {% endfor %}
 {% endif %}
-{% if subnet.next_server is defined %}
-  next-server {{ subnet.next_server }};
+
+{% if subnet.options is defined %}
+{% for key, value in subnet.options.iteritems() %}
+  option {{ key|replace("_", "-") }}{{" "}}{%- if value is string -%}
+{%- if key|replace("_", "-") in dhcp_string_options -%}"{{ value }}";{% else %}{{ value }};{% endif %}{{"\n"}}
+{% else %}
+ {{ value|join(', ') }};
 {% endif %}
-{% if subnet.filename is defined %}
-  filename "{{ subnet.filename }}";
+{% endfor %}
 {% endif %}
-{% if subnet.bootp is defined %}
-{{ subnet.bootp }} bootp;
-{% endif %}
-{% if subnet.booting is defined %}
-{{ subnet.booting }} booting;
-{% endif %}
+
 {% if subnet.hosts is defined %}
 {% for host in subnet.hosts %}
   host {{ host.name }} {
@@ -159,6 +144,7 @@ subnet {{ subnet.ip }} netmask {{ subnet.netmask }} {
   }
 {% endfor %}
 {% endif %}
+
 }
 
 {% endfor %}

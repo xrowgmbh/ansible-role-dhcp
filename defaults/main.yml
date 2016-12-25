@@ -2,3 +2,16 @@
 ---
 
 dhcp_subnets: []
+dhcp_string_options:
+ - bootfile-name
+ - domain-search
+ - dhcp6.bootfile-url
+ - host-name
+ - nds-context
+ - nds-tree-name
+ - netbios-scope
+ - nwip-domain
+ - nwip-suboptions
+ - subnet-selection
+ - tftp-server-name
+ - filename
